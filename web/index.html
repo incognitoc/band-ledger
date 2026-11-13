@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <title>樂團記帳</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app"><div class="state"><div class="spinner"></div><p>載入中…</p></div></div>
+  <script src="config.js"></script>
+  <script>
+    // 假資料模式（網址加上 ?mock=1）不需要載入 Line SDK
+    (function () {
+      var mock = new URLSearchParams(location.search).has('mock');
+      var srcs = mock ? ['mock.js', 'app.js']
+        : ['https://static.line-scdn.net/liff/edge/2/sdk.js', 'app.js'];
+      (function next(i) {
+        if (i >= srcs.length) return;
+        var s = document.createElement('script');
+        s.src = srcs[i];
+        s.onload = function () { next(i + 1); };
+        s.onerror = function () {
+          document.getElementById('app').innerHTML =
+            '<div class="state"><p>無法載入必要的程式，請檢查網路後重新開啟。</p></div>';
+        };
+        document.body.appendChild(s);
+      })(0);
+    })();
+  </script>
+</body>
+</html>
